@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price furniture prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        #wrap {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+        
+        .frame2 {
+            margin-top: 20px;
+        }
+        
+        .login {
+            width: 100%;
+        }
+        
+        .entryForm {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 15px;
+        }
+        
+        .entryForm th {
+            text-align: left;
+            padding: 10px 15px 10px 0;
+            color: #34495e;
+            font-weight: 600;
+            vertical-align: top;
+            width: 180px;
+        }
+        
+        .entryForm td {
+            padding: 10px 0;
+        }
+        
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background-color: white;
+        }
+        
+        select:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        input[type="radio"] {
+            margin-right: 8px;
+            margin-left: 10px;
+        }
+        
+        input[type="radio"]:first-child {
+            margin-left: 0;
+        }
+        
+        .btns {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .btn-clear {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-clear:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .error-message {
+            background-color: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border-left: 4px solid #c33;
+        }
+        
+        .info-box {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+        
+        .info-box p {
+            color: #2c3e50;
+            font-size: 0.95em;
+            margin: 0;
+        }
+        
+        .api-links {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .api-links a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 15px;
+        }
+        
+        .api-links a:hover {
+            text-decoration: underline;
+        }
+        
+        label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #34495e;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap">
+        <h1>Predict Furniture Price</h1>
+
+        <div class="info-box">
+            <p><strong>📊 Furniture Price Predictor</strong> - Enter the furniture details below to get an estimated price.</p>
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            <strong>Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+
+        <section id="furn" class="frame2">
+            <div class="login">
+                <form action="/predict_form" method="post">
+                    <table class="entryForm">
+                        <tr>
+                            <th>Category:</th>
+                            <td>
+                                <select id="category" name="category" required>
+                                    {% for key, value in categories.items() %}
+                                    <option value="{{ key }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Sellable Online:</th>
+                            <td>
+                                <input type="radio" id="sellable_yes" name="sellable_online" value="1" checked>
+                                <label for="sellable_yes">Yes</label>
+                                <input type="radio" id="sellable_no" name="sellable_online" value="0">
+                                <label for="sellable_no">No</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Other Colors:</th>
+                            <td>
+                                <input type="radio" id="colors_yes" name="other_colors" value="1" checked>
+                                <label for="colors_yes">Yes</label>
+                                <input type="radio" id="colors_no" name="other_colors" value="0">
+                                <label for="colors_no">No</label>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Depth:</th>
+                            <td>
+                                <input type="text" name="depth" placeholder="Depth cm" required pattern="[0-9]+(\.[0-9]+)?" title="Please enter a valid number">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Height:</th>
+                            <td>
+                                <input type="text" name="height" placeholder="Height cm" required pattern="[0-9]+(\.[0-9]+)?" title="Please enter a valid number">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Width:</th>
+                            <td>
+                                <input type="text" name="width" placeholder="Width cm" required pattern="[0-9]+(\.[0-9]+)?" title="Please enter a valid number">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="btns">
+                        <button type="reset" class="btn btn-clear">Reset</button>
+                        <button type="submit" class="btn btn-primary">Predict</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <div class="api-links">
+            <a href="/docs" target="_blank">📚 API Documentation</a>
+        </div>
+    </div>
+</body>
+</html>
