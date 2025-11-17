@@ -5,4 +5,10 @@ __pycache__/
 venv
 *.pyc
 .env
+.env.local
+.env.*.local
 .DS_Store
+*.py[cod]
+*$py.class
+*.so
+config.json

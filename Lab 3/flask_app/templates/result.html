@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍷 Prediction Result</h1>
+        </header>
+
+        {% if error %}
+            <div class="result-card error">
+                <h2>❌ Error</h2>
+                <p>{{ error }}</p>
+                <a href="/" class="btn-back">Try Again</a>
+            </div>
+        {% else %}
+            <div class="result-card success">
+                <h2>✅ Prediction Complete</h2>
+                
+                <div class="prediction-result">
+                    <div class="quality-score">
+                        <span class="score-label">Quality Score:</span>
+                        <span class="score-value">{{ prediction }}</span>
+                    </div>
+                    <div class="quality-description">
+                        <span class="description-value">{{ description }}</span>
+                    </div>
+                </div>
+
+                <div class="input-summary">
+                    <h3>Input Features:</h3>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <span class="feature-label">Fixed Acidity:</span>
+                            <span class="feature-value">{{ features.fixed_acidity }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Volatile Acidity:</span>
+                            <span class="feature-value">{{ features.volatile_acidity }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Citric Acid:</span>
+                            <span class="feature-value">{{ features.citric_acid }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Residual Sugar:</span>
+                            <span class="feature-value">{{ features.residual_sugar }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Chlorides:</span>
+                            <span class="feature-value">{{ features.chlorides }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Free SO₂:</span>
+                            <span class="feature-value">{{ features.free_sulfur_dioxide }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Total SO₂:</span>
+                            <span class="feature-value">{{ features.total_sulfur_dioxide }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Density:</span>
+                            <span class="feature-value">{{ features.density }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">pH:</span>
+                            <span class="feature-value">{{ features.pH }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Sulphates:</span>
+                            <span class="feature-value">{{ features.sulphates }}</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-label">Alcohol:</span>
+                            <span class="feature-value">{{ features.alcohol }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a href="/" class="btn-back">Make Another Prediction</a>
+                </div>
+            </div>
+        {% endif %}
+
+        <footer>
+            <p>Powered by Azure ML & MLflow</p>
+        </footer>
+    </div>
+</body>
+</html>
